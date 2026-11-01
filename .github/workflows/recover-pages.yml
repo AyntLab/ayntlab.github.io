@@ -1,0 +1,22 @@
+name: Recover stuck Pages deployment
+
+on:
+  push:
+    paths:
+      - .github/workflows/recover-pages.yml
+  workflow_dispatch:
+
+permissions:
+  pages: write
+
+jobs:
+  cancel-stuck-deployment:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Cancel the stale Pages deployment blocking publication
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api --method POST \
+            repos/AyntLab/ayntlab.github.io/pages/deployments/7747685c6401e8d3124d15c69b3504e3be3fc977/cancel
